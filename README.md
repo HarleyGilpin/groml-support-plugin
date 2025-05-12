@@ -1,51 +1,54 @@
-# groml-support-plugin
+# 🧩 Groml Support Plugin
 
-![Build](https://github.com/HarleyGilpin/groml-support-plugin/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/MARKETPLACE_ID.svg)](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/MARKETPLACE_ID.svg)](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID)
+**Groml Support** is an IntelliJ plugin that brings first-class support for the Groml configuration language—Greg’s Really Obvious Minimal Language.
 
-## Template ToDo list
-- [x] Create a new [IntelliJ Platform Plugin Template][template] project.
-- [ ] Get familiar with the [template documentation][template].
-- [ ] Adjust the [pluginGroup](./gradle.properties) and [pluginName](./gradle.properties), as well as the [id](./src/main/resources/META-INF/plugin.xml) and [sources package](./src/main/kotlin).
-- [ ] Adjust the plugin description in `README` (see [Tips][docs:plugin-description])
-- [ ] Review the [Legal Agreements](https://plugins.jetbrains.com/docs/marketplace/legal-agreements.html?from=IJPluginTemplate).
-- [ ] [Publish a plugin manually](https://plugins.jetbrains.com/docs/intellij/publishing-plugin.html?from=IJPluginTemplate) for the first time.
-- [ ] Set the `MARKETPLACE_ID` in the above README badges. You can obtain it once the plugin is published to JetBrains Marketplace.
-- [ ] Set the [Plugin Signing](https://plugins.jetbrains.com/docs/intellij/plugin-signing.html?from=IJPluginTemplate) related [secrets](https://github.com/JetBrains/intellij-platform-plugin-template#environment-variables).
-- [ ] Set the [Deployment Token](https://plugins.jetbrains.com/docs/marketplace/plugin-upload.html?from=IJPluginTemplate).
-- [ ] Click the <kbd>Watch</kbd> button on the top of the [IntelliJ Platform Plugin Template][template] to be notified about releases containing new features and fixes.
-
-<!-- Plugin description -->
-This Fancy IntelliJ Platform Plugin is going to be your implementation of the brilliant ideas that you have.
-
-This specific section is a source for the [plugin.xml](/src/main/resources/META-INF/plugin.xml) file which will be extracted by the [Gradle](/build.gradle.kts) during the build process.
-
-To keep everything working, do not remove `<!-- ... -->` sections. 
-<!-- Plugin description end -->
-
-## Installation
-
-- Using the IDE built-in plugin system:
-  
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "groml-support-plugin"</kbd> >
-  <kbd>Install</kbd>
-  
-- Using JetBrains Marketplace:
-
-  Go to [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID) and install it by clicking the <kbd>Install to ...</kbd> button in case your IDE is running.
-
-  You can also download the [latest release](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID/versions) from JetBrains Marketplace and install it manually using
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
-
-- Manually:
-
-  Download the [latest release](https://github.com/HarleyGilpin/groml-support-plugin/releases/latest) and install it manually using
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
-
+Groml sits between a simplified TOML and an extended INI in terms of complexity. This plugin ensures `.toml` files written in Groml are parsed and highlighted accurately, avoiding false errors and enabling useful development features.
 
 ---
-Plugin based on the [IntelliJ Platform Plugin Template][template].
 
-[template]: https://github.com/JetBrains/intellij-platform-plugin-template
-[docs:plugin-description]: https://plugins.jetbrains.com/docs/intellij/plugin-user-experience.html#plugin-description-and-presentation
+## ✨ Features
+
+- 🎨 **Custom Syntax Highlighting**  
+  Distinguishes sections, keys, values, arrays, maps, and comments using color-coded formatting.
+
+- 🧠 **Accurate Parsing**  
+  Recognizes Groml syntax and avoids TOML validation errors on valid Groml files.
+
+- 🧬 **Section Inheritance Support**  
+  Supports Groml’s inheritance model with the `.` prefix (e.g., `[.child]` expands parent sections).
+
+- 🪓 **Groml-Specific Validation**  
+  Detects syntax errors such as disallowed multiline strings or unsupported types.
+
+- 🧭 **Code Navigation**  
+  Navigate easily between sections and key-value pairs within the file.
+
+---
+
+## 📁 File Extension
+
+- `.toml` — Groml uses the `.toml` extension for compatibility. This plugin distinguishes Groml from standard TOML for proper handling.
+
+---
+
+## 📦 Installation
+
+### Via IntelliJ Marketplace
+
+1. Open **Settings > Plugins**
+2. Click the **Marketplace** tab
+3. Search for **Groml Support**
+4. Click **Install** and restart the IDE
+
+### Manual Installation
+
+1. Download the latest `.zip` from the [Releases](https://github.com/your-org/groml-intellij-plugin/releases)
+2. Open **Settings > Plugins**
+3. Click the ⚙️ gear icon > **Install Plugin from Disk**
+4. Select the `.zip` file and restart the IDE
+
+---
+
+## ⚙️ Configuration
+
+No configuration is needed. The plugin automatically detects `.toml` files and applies Groml highlighting. If needed, adjust file type associations in:
