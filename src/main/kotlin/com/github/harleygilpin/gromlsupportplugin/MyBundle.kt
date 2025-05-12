@@ -1,4 +1,4 @@
-package org.jetbrains.plugins.template
+package com.github.harleygilpin.gromlsupportplugin
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.NonNls
