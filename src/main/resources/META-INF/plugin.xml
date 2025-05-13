@@ -1,15 +1,17 @@
-<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.github.harleygilpin.gromlsupportplugin</id>
-    <name>groml-support-plugin</name>
-    <vendor>harleygilpin</vendor>
+    <name>Groml Language Support</name>
+    <description>Syntax highlighting and support for Groml config files.</description>
+    <vendor url="https://github.com/harleygilpin">Harley Gilpin</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
-    <resource-bundle>messages.MyBundle</resource-bundle>
-
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.harleygilpin.gromlsupportplugin.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-        <postStartupActivity implementation="com.github.harleygilpin.gromlsupportplugin.startup.MyProjectActivity" />
+        <fileType name="Groml"
+                  language="Groml"
+                  implementationClass="com.github.harleygilpin.gromlsupportplugin.GromlFileType"
+                  extensions="toml" />
+        <lang.syntaxHighlighterFactory language="Groml"
+                                       implementationClass="com.github.harleygilpin.gromlsupportplugin.GromlSyntaxHighlighterFactory"/>
     </extensions>
 </idea-plugin>

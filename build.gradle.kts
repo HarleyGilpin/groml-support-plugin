@@ -1,15 +1,22 @@
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
+import org.jetbrains.grammarkit.tasks.GenerateLexerTask
+import org.jetbrains.grammarkit.tasks.GenerateParserTask
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+
 
 plugins {
     id("java") // Java support
+    id("org.jetbrains.grammarkit") version "2021.2.2"
+    id("org.jlleitschuh.gradle.ktlint") version "11.6.0"
     alias(libs.plugins.kotlin) // Kotlin support
     alias(libs.plugins.intelliJPlatform) // IntelliJ Platform Gradle Plugin
     alias(libs.plugins.changelog) // Gradle Changelog Plugin
     alias(libs.plugins.qodana) // Gradle Qodana Plugin
     alias(libs.plugins.kover) // Gradle Kover Plugin
 }
+
+val grammarKitExtra = configurations.create("grammarKitExtra")
 
 group = providers.gradleProperty("pluginGroup").get()
 version = providers.gradleProperty("pluginVersion").get()
@@ -22,6 +29,7 @@ kotlin {
 // Configure project's dependencies
 repositories {
     mavenCentral()
+    gradlePluginPortal()
 
     // IntelliJ Platform Gradle Plugin Repositories Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-repositories-extension.html
     intellijPlatform {
@@ -31,6 +39,11 @@ repositories {
 
 // Dependencies are managed with Gradle version catalog - read more: https://docs.gradle.org/current/userguide/platforms.html#sub:version-catalog
 dependencies {
+    add("grammarKitExtra", "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
+    add("grammarKitExtra", "io.opentelemetry:opentelemetry-api:1.30.0")
+    add("grammarKitExtra", "io.opentelemetry:opentelemetry-context:1.30.0")
+    add("grammarKitExtra", "org.jetbrains.intellij.deps:trove4j:1.0.20200330")
+
     testImplementation(libs.junit)
     testImplementation(libs.opentest4j)
 
@@ -55,30 +68,32 @@ intellijPlatform {
         version = providers.gradleProperty("pluginVersion")
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
-        description = providers.fileContents(layout.projectDirectory.file("README.md")).asText.map {
-            val start = "<!-- Plugin description -->"
-            val end = "<!-- Plugin description end -->"
+        description =
+            providers.fileContents(layout.projectDirectory.file("README.md")).asText.map {
+                val start = "<!-- Plugin description -->"
+                val end = "<!-- Plugin description end -->"
 
-            with(it.lines()) {
-                if (!containsAll(listOf(start, end))) {
-                    throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
+                with(it.lines()) {
+                    if (!containsAll(listOf(start, end))) {
+                        throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
+                    }
+                    subList(indexOf(start) + 1, indexOf(end)).joinToString("\n").let(::markdownToHTML)
                 }
-                subList(indexOf(start) + 1, indexOf(end)).joinToString("\n").let(::markdownToHTML)
             }
-        }
 
         val changelog = project.changelog // local variable for configuration cache compatibility
         // Get the latest available change notes from the changelog file
-        changeNotes = providers.gradleProperty("pluginVersion").map { pluginVersion ->
-            with(changelog) {
-                renderItem(
-                    (getOrNull(pluginVersion) ?: getUnreleased())
-                        .withHeader(false)
-                        .withEmptySections(false),
-                    Changelog.OutputType.HTML,
-                )
+        changeNotes =
+            providers.gradleProperty("pluginVersion").map { pluginVersion ->
+                with(changelog) {
+                    renderItem(
+                        (getOrNull(pluginVersion) ?: getUnreleased())
+                            .withHeader(false)
+                            .withEmptySections(false),
+                        Changelog.OutputType.HTML
+                    )
+                }
             }
-        }
 
         ideaVersion {
             sinceBuild = providers.gradleProperty("pluginSinceBuild")
@@ -134,18 +149,67 @@ tasks {
     }
 }
 
+sourceSets["main"].java.srcDir("src/main/gen")
+
+tasks.named<JavaCompile>("compileJava") {
+    source("src/main/gen")
+}
+
+tasks.withType<GenerateLexerTask>().configureEach {
+    source.set(
+        layout.projectDirectory
+            .file("src/main/grammar/GromlLexer.flex")
+            .asFile.absolutePath
+    )
+    targetDir.set(
+        layout.projectDirectory
+            .dir("src/main/gen/com/github/harleygilpin/gromlsupportplugin/lexer")
+            .asFile.absolutePath
+    )
+    targetClass.set("GromlLexer")
+    purgeOldFiles.set(true)
+}
+
+@Suppress("UnstableApiUsage")
+tasks.withType<GenerateParserTask>().configureEach {
+    source.set(
+        layout.projectDirectory
+            .file("src/main/grammar/Groml.bnf")
+            .asFile.absolutePath
+    )
+    targetRoot.set(
+        layout.projectDirectory
+            .dir("src/main/gen")
+            .asFile.absolutePath
+    )
+
+    // These are relative to targetRoot
+    pathToParser.set("com/github/harleygilpin/gromlsupportplugin/parser/GromlParser.java")
+    pathToPsiRoot.set("com/github/harleygilpin/gromlsupportplugin/psi")
+
+    purgeOldFiles.set(true)
+
+    classpath.from(classpath, grammarKitExtra)
+}
+
+grammarKit {
+    jflexRelease.set("1.7.0-1")
+    grammarKitRelease.set("2021.1.2")
+}
+
 intellijPlatformTesting {
     runIde {
         register("runIdeForUiTests") {
             task {
-                jvmArgumentProviders += CommandLineArgumentProvider {
-                    listOf(
-                        "-Drobot-server.port=8082",
-                        "-Dide.mac.message.dialogs.as.sheets=false",
-                        "-Djb.privacy.policy.text=<!--999.999-->",
-                        "-Djb.consents.confirmation.enabled=false",
-                    )
-                }
+                jvmArgumentProviders +=
+                    CommandLineArgumentProvider {
+                        listOf(
+                            "-Drobot-server.port=8082",
+                            "-Dide.mac.message.dialogs.as.sheets=false",
+                            "-Djb.privacy.policy.text=<!--999.999-->",
+                            "-Djb.consents.confirmation.enabled=false"
+                        )
+                    }
             }
 
             plugins {
