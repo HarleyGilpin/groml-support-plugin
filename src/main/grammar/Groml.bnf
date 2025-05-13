@@ -1,0 +1,31 @@
+{
+  name = "Groml"
+  parserClass = "com.github.harleygilpin.gromlsupportplugin.parser.GromlParser"
+  psiPackage = "com.github.harleygilpin.gromlsupportplugin.psi"
+  psiImplPackage = "com.github.harleygilpin.gromlsupportplugin.psi.impl"
+  psiClassPrefix = "Groml"
+  psiImplClassSuffix = "Impl"
+  elementTypeHolderClass = "com.github.harleygilpin.gromlsupportplugin.psi.GromlTypes"
+}
+
+file ::= item* { psiClass = "File" }
+
+item ::= comment | section
+
+comment ::= GROML_COMMENT { psiClass = "Comment" }
+
+section ::= section_header property* { psiClass = "Section" }
+
+section_header ::= LBRACKET section_name RBRACKET { psiClass = "SectionHeader" }
+
+section_name ::= KEY (DOT KEY)* { psiClass = "SectionName" }
+
+property ::= KEY EQUALS value { psiClass = "Property" }
+
+value ::= STRING | NUMBER | list | map { psiClass = "Value" }
+
+list ::= LBRACKET [value (COMMA value)*] RBRACKET { psiClass = "List" }
+
+map ::= LBRACE [map_entry (COMMA map_entry)*] RBRACE { psiClass = "Map" }
+
+map_entry ::= KEY EQUALS value { psiClass = "MapEntry" }
