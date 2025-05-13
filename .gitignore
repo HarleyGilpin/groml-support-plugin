@@ -5,3 +5,6 @@
 build
 
 .qodo
+
+# IntelliJ Plugin: GrammarKit generated files
+/src/main/gen/
