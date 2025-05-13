@@ -2,6 +2,11 @@
 
 **Groml Support** is an IntelliJ plugin that brings first-class support for the [Groml configuration language—Greg’s Really Obvious Minimal Language](https://github.com/GregHib/void/tree/9709cc14e448617ec0cfe23b3921b7287950d221/config).
 
+
+<!-- Plugin description -->
+Adds syntax highlighting and parsing support for Groml configuration files (`.toml`), including sections, keys, values, arrays, and maps.
+<!-- Plugin description end -->
+
 Groml sits between a simplified TOML and an extended INI in terms of complexity. This plugin ensures `.toml` files written in Groml are parsed and highlighted accurately, avoiding false errors and enabling useful development features.
 
 ---
