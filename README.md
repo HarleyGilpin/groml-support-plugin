@@ -4,10 +4,10 @@
 
 
 <!-- Plugin description -->
-Adds syntax highlighting and parsing support for Groml configuration files (`.toml`), including sections, keys, values, arrays, and maps.
+Adds syntax highlighting and parsing support for Groml configuration files (`.groml`), including sections, keys, values, arrays, and maps.
 <!-- Plugin description end -->
 
-Groml sits between a simplified TOML and an extended INI in terms of complexity. This plugin ensures `.toml` files written in Groml are parsed and highlighted accurately, avoiding false errors and enabling useful development features.
+Groml sits between a simplified TOML and an extended INI in terms of complexity. This plugin ensures `.groml` files written in Groml are parsed and highlighted accurately, avoiding false errors and enabling useful development features.
 
 ---
 
@@ -32,7 +32,7 @@ Groml sits between a simplified TOML and an extended INI in terms of complexity.
 
 ## 📁 File Extension
 
-- `.toml` — Groml uses the `.toml` extension for compatibility. This plugin distinguishes Groml from standard TOML for proper handling.
+- Groml uses the `.groml` extension for compatibility. This plugin distinguishes Groml from standard TOML for proper handling.
 
 ---
 
