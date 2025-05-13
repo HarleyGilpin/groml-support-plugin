@@ -222,3 +222,9 @@ tasks.named("runKtlintCheckOverMainSourceSet") {
 tasks.named("compileKotlin") {
     dependsOn(generateGromlLexer, generateGromlParser)
 }
+
+ktlint {
+    filter {
+        exclude("**/src/main/gen/**")
+    }
+}
