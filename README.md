@@ -47,7 +47,7 @@ Groml sits between a simplified TOML and an extended INI in terms of complexity.
 
 ### Manual Installation
 
-1. Download the latest `.zip` from the [Releases](https://github.com/your-org/groml-intellij-plugin/releases)
+1. Download the latest `.zip` from the [Releases](https://github.com/HarleyGilpin/groml-support-plugin/releases)
 2. Open **Settings > Plugins**
 3. Click the ⚙️ gear icon > **Install Plugin from Disk**
 4. Select the `.zip` file and restart the IDE
