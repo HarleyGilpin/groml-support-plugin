@@ -22,8 +22,8 @@ GROML_COMMENT=\#.*
 KEY_CHAR=[A-Za-z0-9_.-]
 KEY={KEY_CHAR}+
 NUMBER=[+-]?[0-9_]+(\.[0-9_]+)?
-STRING_DOUBLE="([^\"\\]|\\.)*"
-STRING_SINGLE='[^']*'
+STRING_DOUBLE = \"([^\"\\]|\\.)*\"
+STRING_SINGLE = \'([^\'\\]|\\.)*\'
 
 EQUALS=\=
 LBRACKET=\[

@@ -90,7 +90,7 @@ intellijPlatform {
                         (getOrNull(pluginVersion) ?: getUnreleased())
                             .withHeader(false)
                             .withEmptySections(false),
-                        Changelog.OutputType.HTML
+                        Changelog.OutputType.HTML,
                     )
                 }
             }
@@ -149,6 +149,23 @@ tasks {
     }
 }
 
+sourceSets {
+    test {
+        resources.srcDir("src/main/resources")
+    }
+}
+
+tasks.test {
+    testLogging {
+        showStandardStreams = true
+        events("passed", "failed", "skipped", "standardOut", "standardError")
+    }
+}
+
+tasks.processTestResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 sourceSets["main"].java.srcDir("src/main/gen")
 
 tasks.named<JavaCompile>("compileJava") {
@@ -159,12 +176,12 @@ tasks.withType<GenerateLexerTask>().configureEach {
     source.set(
         layout.projectDirectory
             .file("src/main/grammar/GromlLexer.flex")
-            .asFile.absolutePath
+            .asFile.absolutePath,
     )
     targetDir.set(
         layout.projectDirectory
             .dir("src/main/gen/com/github/harleygilpin/gromlsupportplugin/lexer")
-            .asFile.absolutePath
+            .asFile.absolutePath,
     )
     targetClass.set("GromlLexer")
     purgeOldFiles.set(true)
@@ -175,12 +192,12 @@ tasks.withType<GenerateParserTask>().configureEach {
     source.set(
         layout.projectDirectory
             .file("src/main/grammar/Groml.bnf")
-            .asFile.absolutePath
+            .asFile.absolutePath,
     )
     targetRoot.set(
         layout.projectDirectory
             .dir("src/main/gen")
-            .asFile.absolutePath
+            .asFile.absolutePath,
     )
 
     // These are relative to targetRoot
@@ -207,7 +224,7 @@ intellijPlatformTesting {
                             "-Drobot-server.port=8082",
                             "-Dide.mac.message.dialogs.as.sheets=false",
                             "-Djb.privacy.policy.text=<!--999.999-->",
-                            "-Djb.consents.confirmation.enabled=false"
+                            "-Djb.consents.confirmation.enabled=false",
                         )
                     }
             }

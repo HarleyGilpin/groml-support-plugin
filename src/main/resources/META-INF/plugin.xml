@@ -5,12 +5,16 @@
     <vendor url="https://github.com/harleygilpin">Harley Gilpin</vendor>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <fileType name="Groml"
                   language="Groml"
-                  implementationClass="com.github.harleygilpin.gromlsupportplugin.GromlFileType"
-                  extensions="toml" />
+                  extensions="groml"
+
+                  implementationClass="com.github.harleygilpin.gromlsupportplugin.GromlFileType" />
+        <lang.parserDefinition language="Groml"
+                               implementationClass="com.github.harleygilpin.gromlsupportplugin.GromlParserDefinition"/>
         <lang.syntaxHighlighterFactory language="Groml"
                                        implementationClass="com.github.harleygilpin.gromlsupportplugin.GromlSyntaxHighlighterFactory"/>
     </extensions>

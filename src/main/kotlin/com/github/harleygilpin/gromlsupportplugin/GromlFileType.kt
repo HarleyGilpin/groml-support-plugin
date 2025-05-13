@@ -1,14 +1,17 @@
 package com.github.harleygilpin.gromlsupportplugin
 
 import com.intellij.openapi.fileTypes.LanguageFileType
-import javax.swing.Icon
 
-class GromlFileType : LanguageFileType(GromlLanguage) {
+object GromlFileType : LanguageFileType(GromlLanguage) {
+    init {
+        println(">> GromlFileType initialized")
+    }
+
     override fun getName() = "Groml"
 
-    override fun getDescription() = "Groml configuration file"
+    override fun getDescription() = "Groml config file"
 
-    override fun getDefaultExtension() = "toml"
+    override fun getDefaultExtension() = "groml"
 
-    override fun getIcon(): Icon = GromlIcons.FILE
+    override fun getIcon() = null
 }
