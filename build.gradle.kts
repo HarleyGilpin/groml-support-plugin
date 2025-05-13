@@ -172,43 +172,6 @@ tasks.named<JavaCompile>("compileJava") {
     source("src/main/gen")
 }
 
-tasks.withType<GenerateLexerTask>().configureEach {
-    source.set(
-        layout.projectDirectory
-            .file("src/main/grammar/GromlLexer.flex")
-            .asFile.absolutePath,
-    )
-    targetDir.set(
-        layout.projectDirectory
-            .dir("src/main/gen/com/github/harleygilpin/gromlsupportplugin/lexer")
-            .asFile.absolutePath,
-    )
-    targetClass.set("GromlLexer")
-    purgeOldFiles.set(true)
-}
-
-@Suppress("UnstableApiUsage")
-tasks.withType<GenerateParserTask>().configureEach {
-    source.set(
-        layout.projectDirectory
-            .file("src/main/grammar/Groml.bnf")
-            .asFile.absolutePath,
-    )
-    targetRoot.set(
-        layout.projectDirectory
-            .dir("src/main/gen")
-            .asFile.absolutePath,
-    )
-
-    // These are relative to targetRoot
-    pathToParser.set("com/github/harleygilpin/gromlsupportplugin/parser/GromlParser.java")
-    pathToPsiRoot.set("com/github/harleygilpin/gromlsupportplugin/psi")
-
-    purgeOldFiles.set(true)
-
-    classpath.from(classpath, grammarKitExtra)
-}
-
 grammarKit {
     jflexRelease.set("1.7.0-1")
     grammarKitRelease.set("2021.1.2")
@@ -234,4 +197,26 @@ intellijPlatformTesting {
             }
         }
     }
+}
+
+val generateGromlLexer by tasks.registering(GenerateLexerTask::class) {
+    source.set(file("src/main/grammar/GromlLexer.flex").absolutePath)
+    targetDir.set(file("src/main/gen/com/github/harleygilpin/gromlsupportplugin/lexer").absolutePath)
+    targetClass.set("GromlLexer")
+    purgeOldFiles.set(true)
+    classpath.from(grammarKitExtra)
+}
+
+val generateGromlParser by tasks.registering(GenerateParserTask::class) {
+    source.set(file("src/main/grammar/Groml.bnf").absolutePath)
+    targetRoot.set(file("src/main/gen").absolutePath)
+    pathToParser.set("com/github/harleygilpin/gromlsupportplugin/parser/GromlParser.java")
+    pathToPsiRoot.set("com/github/harleygilpin/gromlsupportplugin/psi")
+    purgeOldFiles.set(true)
+    classpath.from(grammarKitExtra)
+}
+
+// Ensure generated sources exist before compiling
+tasks.named("compileKotlin") {
+    dependsOn(generateGromlLexer, generateGromlParser)
 }
