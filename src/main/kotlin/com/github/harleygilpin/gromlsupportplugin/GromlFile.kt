@@ -4,7 +4,7 @@ import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.psi.FileViewProvider
 
 class GromlFile(
-    viewProvider: FileViewProvider,
+    viewProvider: FileViewProvider
 ) : PsiFileBase(viewProvider, GromlLanguage) {
     override fun getFileType() = GromlFileType
 

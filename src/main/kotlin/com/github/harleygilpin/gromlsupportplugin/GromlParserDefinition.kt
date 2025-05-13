@@ -23,12 +23,13 @@ class GromlParserDefinition : ParserDefinition {
 
     override fun getStringLiteralElements(): TokenSet = TokenSet.EMPTY
 
-    override fun createElement(node: com.intellij.lang.ASTNode) = GromlTypes.Factory.createElement(node)
+    override fun createElement(node: ASTNode) = GromlTypes.Factory.createElement(node)
 
     override fun createFile(viewProvider: FileViewProvider): PsiFile = GromlFile(viewProvider)
 
+    @Deprecated("Deprecated in Java")
     override fun spaceExistanceTypeBetweenTokens(
         left: ASTNode,
-        right: ASTNode,
+        right: ASTNode
     ) = ParserDefinition.SpaceRequirements.MAY
 }

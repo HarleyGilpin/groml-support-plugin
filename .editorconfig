@@ -11,15 +11,8 @@ indent_size = 4
 
 [*.{kt,kts}]
 # Kotlin-specific overrides
-ij_kotlin_code_style_defaults = KOTLIN_OFFICIAL
-ij_kotlin_wrap_after_multiline_when_entry = false
 ij_wrap_on_typing = true
 ij_any_wrap_long_lines = true
-
-# Ktlint overrides (optional)
-ktlint_custom-rule-set = enabled
-ktlint_standard_function-expression-body = disabled
-ktlint_standard_function-literal = disabled
 
 [*.md]
 max_line_length = 80
