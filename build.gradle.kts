@@ -216,7 +216,9 @@ val generateGromlParser by tasks.registering(GenerateParserTask::class) {
     classpath.from(grammarKitExtra)
 }
 
-// Ensure generated sources exist before compiling
+tasks.named("runKtlintCheckOverMainSourceSet") {
+    dependsOn("generateGromlParser", "generateGromlLexer")
+}
 tasks.named("compileKotlin") {
     dependsOn(generateGromlLexer, generateGromlParser)
 }
