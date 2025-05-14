@@ -40,7 +40,7 @@ repositories {
 // Dependencies are managed with Gradle version catalog - read more: https://docs.gradle.org/current/userguide/platforms.html#sub:version-catalog
 dependencies {
     add("grammarKitExtra", "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
-    add("grammarKitExtra", "io.opentelemetry:opentelemetry-api:1.30.0")
+    add("grammarKitExtra", "io.opentelemetry:opentelemetry-api:1.50.0")
     add("grammarKitExtra", "io.opentelemetry:opentelemetry-context:1.30.0")
     add("grammarKitExtra", "org.jetbrains.intellij.deps:trove4j:1.0.20200330")
 
