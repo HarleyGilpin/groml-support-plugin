@@ -3,5 +3,12 @@
 # groml-support-plugin Changelog
 
 ## [Unreleased]
+
+## [0.0.4] - 2025-05-14
+
 ### Added
-- Initial scaffold created from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
+
+- GROML file extension icon
+
+[Unreleased]: https://github.com/HarleyGilpin/groml-support-plugin/compare/v0.0.4...HEAD
+[0.0.4]: https://github.com/HarleyGilpin/groml-support-plugin/commits/v0.0.4
