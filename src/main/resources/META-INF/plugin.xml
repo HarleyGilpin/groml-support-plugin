@@ -10,8 +10,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <fileType name="Groml"
                   language="Groml"
-                  extensions="groml"
-
+                  extensions="groml;toml"
                   implementationClass="com.github.harleygilpin.gromlsupportplugin.GromlFileType" />
         <lang.parserDefinition language="Groml"
                                implementationClass="com.github.harleygilpin.gromlsupportplugin.GromlParserDefinition"/>
