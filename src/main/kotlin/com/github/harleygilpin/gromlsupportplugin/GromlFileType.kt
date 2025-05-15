@@ -1,6 +1,8 @@
 package com.github.harleygilpin.gromlsupportplugin
 
 import com.intellij.openapi.fileTypes.LanguageFileType
+import com.intellij.openapi.util.IconLoader
+import javax.swing.Icon
 
 object GromlFileType : LanguageFileType(GromlLanguage) {
     init {
@@ -13,5 +15,7 @@ object GromlFileType : LanguageFileType(GromlLanguage) {
 
     override fun getDefaultExtension() = "groml"
 
-    override fun getIcon() = null
+    override fun getIcon(): Icon = IconLoader.getIcon("/icons/file_icon.svg", javaClass)
+
 }
+
