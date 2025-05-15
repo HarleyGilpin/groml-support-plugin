@@ -16,6 +16,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+
     steps:
 
       # Check out the current repository
@@ -34,8 +35,13 @@ jobs:
       # Setup Gradle
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: wrapper
+          cache-cleanup: on-success
 
-      # Set environment variables
+      - name: Clean Build
+        run: ./gradlew clean
+
       - name: Export Properties
         id: properties
         shell: bash
@@ -44,7 +50,7 @@ jobs:
           ${{ github.event.release.body }}
           EOM
           )"
-          
+
           echo "changelog<<EOF" >> $GITHUB_OUTPUT
           echo "$CHANGELOG" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -54,23 +60,26 @@ jobs:
         if: ${{ steps.properties.outputs.changelog != '' }}
         env:
           CHANGELOG: ${{ steps.properties.outputs.changelog }}
-        run: |
-          ./gradlew patchChangelog --release-note="$CHANGELOG"
+        run: ./gradlew patchChangelog --release-note="$CHANGELOG"
 
-      # Publish the plugin to JetBrains Marketplace
-      - name: Publish Plugin
+      - name: Publish Plugin (with Retry)
         env:
           PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
           CERTIFICATE_CHAIN: ${{ secrets.CERTIFICATE_CHAIN }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           PRIVATE_KEY_PASSWORD: ${{ secrets.PRIVATE_KEY_PASSWORD }}
-        run: ./gradlew publishPlugin
+        run: |
+          for i in {1..3}; do
+            ./gradlew publishPlugin && break || sleep 15
+          done
 
       # Upload artifact as a release asset
       - name: Upload Release Asset
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload ${{ github.event.release.tag_name }} ./build/distributions/*
+        run: |
+          FILE=$(ls -t ./build/distributions/* | head -n1)
+          gh release upload ${{ github.event.release.tag_name }} "$FILE"
 
       # Create a pull request
       - name: Create Pull Request
@@ -88,14 +97,10 @@ jobs:
           git checkout -b $BRANCH
           git commit -am "Changelog update - $VERSION"
           git push --set-upstream origin $BRANCH
-          
-          gh label create "$LABEL" \
-            --description "Pull requests with release changelog update" \
-            --force \
-            || true
 
+          gh label create "$LABEL" --description "Pull requests with release changelog update" --force || true
           gh pr create \
             --title "Changelog update - \`$VERSION\`" \
-            --body "Current pull request contains patched \`CHANGELOG.md\` file for the \`$VERSION\` version." \
+            --body "This pull request contains the patched \`CHANGELOG.md\` for version \`$VERSION\`." \
             --label "$LABEL" \
             --head $BRANCH
